@@ -1,0 +1,25 @@
+# Virtual Environment
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Sessions
+sessions/
+
+# Outputs
+outputs/
+
+# Logs
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
