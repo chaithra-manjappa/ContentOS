@@ -24,7 +24,7 @@ def main() -> None:
 
     prompt = input("Ask ContentOS: ")
 
-    answer = orchestrator.ask(prompt)
+    answer = orchestrator.create_post(prompt)
 
     print("\n")
     print(answer)
