@@ -6,6 +6,7 @@ from app.agents.orchestrator.content_orchestrator import ContentOrchestrator
 from app.agents.planner.planner_agent import PlannerAgent
 from app.agents.writer.linkedin_writer import LinkedInWriter
 from app.agents.research.research_agent import ResearchAgent
+from app.agents.reviewer.reviewer_agent import ReviewerAgent
 from app.clients.groq_client import GroqClient
 from app.config.env import EnvLoader
 from app.config.settings import Settings
@@ -38,6 +39,8 @@ def main() -> None:
 
     researcher = ResearchAgent(llm)
 
+    reviewer = ReviewerAgent(llm)
+
     writer = LinkedInWriter(
         llm=llm,
         prompt_service=prompt_service,
@@ -48,6 +51,7 @@ def main() -> None:
         planner=planner,
         researcher=researcher,
         writer=writer,
+        reviewer=reviewer,
     )
 
     goal = input("🎯 What is your goal? ")
