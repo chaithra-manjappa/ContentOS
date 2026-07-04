@@ -1,21 +1,22 @@
 """Content orchestrator."""
 
-from app.clients.base_llm import BaseLLM
+from app.agents.writer.linkedin_writer import LinkedInWriter
 
 
 class ContentOrchestrator:
-    """Coordinates AI agents."""
 
     def __init__(
         self,
-        llm: BaseLLM,
+        writer: LinkedInWriter,
     ) -> None:
 
-        self._llm = llm
+        self._writer = writer
 
-    def ask(
+    def create_post(
         self,
-        prompt: str,
+        topic: str,
     ) -> str:
 
-        return self._llm.generate(prompt)
+        return self._writer.generate(
+            topic,
+        )
