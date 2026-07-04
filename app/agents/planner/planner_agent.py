@@ -5,7 +5,8 @@ from app.clients.base_llm import BaseLLM
 
 class PlannerAgent:
     """
-    Converts a user goal into a structured execution plan.
+    Converts a user goal into
+    the best topic to write about.
     """
 
     def __init__(
@@ -19,25 +20,34 @@ class PlannerAgent:
         self,
         goal: str,
     ) -> str:
+        """
+        Returns ONLY a topic.
+        """
 
         prompt = f"""
-You are an AI strategist.
+You are an expert content strategist.
 
-A user has this goal:
+The user's goal is:
 
 {goal}
 
-Think step by step.
+Return ONLY one LinkedIn post topic.
 
-Return ONLY:
+Examples:
 
-Audience:
-Platform:
-Content Type:
+Goal:
+Become known for SwiftUI
+
 Topic:
-Reason:
+SwiftUI Performance Tips
 
-Keep it concise.
+Goal:
+Learn system design
+
+Topic:
+System Design Interview Mistakes
+
+Return ONLY the topic.
 """
 
-        return self._llm.generate(prompt)
+        return self._llm.generate(prompt).strip()
