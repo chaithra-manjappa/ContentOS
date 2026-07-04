@@ -5,10 +5,12 @@ from pathlib import Path
 from app.agents.orchestrator.content_orchestrator import ContentOrchestrator
 from app.agents.planner.planner_agent import PlannerAgent
 from app.agents.writer.linkedin_writer import LinkedInWriter
+from app.agents.research.research_agent import ResearchAgent
 from app.clients.groq_client import GroqClient
 from app.config.env import EnvLoader
 from app.config.settings import Settings
 from app.services.prompt_service import PromptService
+
 
 
 def main() -> None:
@@ -34,6 +36,8 @@ def main() -> None:
     # Agents
     planner = PlannerAgent(llm)
 
+    researcher = ResearchAgent(llm)
+
     writer = LinkedInWriter(
         llm=llm,
         prompt_service=prompt_service,
@@ -42,6 +46,7 @@ def main() -> None:
     # Orchestrator
     orchestrator = ContentOrchestrator(
         planner=planner,
+        researcher=researcher,
         writer=writer,
     )
 
