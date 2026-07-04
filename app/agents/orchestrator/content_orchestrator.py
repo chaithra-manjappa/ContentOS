@@ -11,6 +11,7 @@ from app.agents.scene.scene_agent import SceneAgent
 from app.agents.video.video_agent import VideoAgent
 from app.agents.writer.content_writer import ContentWriter
 from app.services.video_renderer import VideoRenderer
+from app.agents.voice.voice_agent import VoiceAgent
 
 
 class ContentOrchestrator:
@@ -27,6 +28,7 @@ class ContentOrchestrator:
         video_agent: VideoAgent,
         scene_agent: SceneAgent,
         image_agent: ImageAgent,
+        voice_agent: VoiceAgent,
         renderer: VideoRenderer,
         memory: MemoryAgent,
     ) -> None:
@@ -38,6 +40,7 @@ class ContentOrchestrator:
         self._video_agent = video_agent
         self._scene_agent = scene_agent
         self._image_agent = image_agent
+        self._voice_agent = voice_agent
         self._renderer = renderer
         self._memory = memory
 
@@ -104,6 +107,15 @@ class ContentOrchestrator:
 
         for scene in project.scenes:
             print(scene.image_path)
+
+        project = self._voice_agent.generate(project)
+
+        print("\n" + "=" * 80)
+        print("🎤 AUDIO")
+        print("=" * 80)
+
+        for scene in project.scenes:
+            print(scene.audio_path)     
 
         # Step 8 - Render video
         project = self._renderer.render(

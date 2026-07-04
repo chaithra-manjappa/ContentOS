@@ -27,11 +27,19 @@ class PlannerAgent:
         prompt = f"""
 You are an expert content strategist.
 
+Your job is to transform a user's goal into the single best content topic.
+
 The user's goal is:
 
 {goal}
 
-Return ONLY one LinkedIn post topic.
+Requirements:
+
+- Return exactly ONE content topic.
+- Keep the topic concise and specific.
+- Make it engaging and relevant to the user's goal.
+- Do not include explanations, numbering, markdown or quotes.
+- Output only the topic.
 
 Examples:
 
@@ -42,12 +50,22 @@ Topic:
 SwiftUI Performance Tips
 
 Goal:
-Learn system design
+Grow my bakery business
 
 Topic:
-System Design Interview Mistakes
+5 Mistakes People Make When Choosing Birthday Cakes
 
-Return ONLY the topic.
+Goal:
+Teach healthy eating to parents
+
+Topic:
+Healthy Lunch Ideas for School Children
+
+Goal:
+Build a personal finance audience
+
+Topic:
+7 Money Habits That Build Long-Term Wealth
 """
 
         return self._llm.generate(prompt).strip()
