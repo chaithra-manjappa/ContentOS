@@ -1,11 +1,14 @@
 """Scene Agent."""
 
 from app.clients.base_llm import BaseLLM
+from app.models.scene import Scene
+from app.models.video_project import VideoProject
+from app.utils.json_parser import JSONParser
 
 
 class SceneAgent:
     """
-    Converts a reel script into individual scenes.
+    Converts a reel script into a VideoProject.
     """
 
     def __init__(
@@ -18,27 +21,62 @@ class SceneAgent:
     def generate(
         self,
         script: str,
-    ) -> str:
+    ) -> VideoProject:
 
         prompt = f"""
-You are an expert short-form video director.
+You are an expert Instagram Reel creator.
 
-Break the following Instagram Reel script into scenes.
+Convert the following script into a storyboard.
 
-For each scene provide:
+Return ONLY valid JSON.
 
-Scene Number:
-Duration:
-Visual Description:
-Camera Movement:
-Narration:
-Caption On Screen:
+The JSON MUST follow this schema exactly.
 
-Keep each scene between 4-6 seconds.
+{{
+    "title": "Video Title",
+    "scenes": [
+        {{
+            "number": 1,
+            "duration": 5,
+            "visual_prompt": "Describe what should appear on screen.",
+            "narration": "Voice over text.",
+            "caption": "Caption shown on screen."
+        }}
+    ]
+}}
+
+Rules:
+
+- Return ONLY JSON.
+- No markdown.
+- No explanation.
+- No ```json.
+- Each scene should be between 4 and 6 seconds.
+- Create between 5 and 8 scenes.
 
 Script:
 
 {script}
 """
 
-        return self._llm.generate(prompt)
+        response = self._llm.generate(prompt)
+
+        data = JSONParser.parse(response)
+
+        project = VideoProject(
+            title=data["title"],
+        )
+
+        for scene_data in data["scenes"]:
+
+            scene = Scene(
+                number=scene_data["number"],
+                duration=scene_data["duration"],
+                visual_prompt=scene_data["visual_prompt"],
+                narration=scene_data["narration"],
+                caption=scene_data["caption"],
+            )
+
+            project.scenes.append(scene)
+
+        return project
