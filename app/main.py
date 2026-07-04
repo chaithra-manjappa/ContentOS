@@ -7,6 +7,7 @@ from app.agents.planner.planner_agent import PlannerAgent
 from app.agents.writer.linkedin_writer import LinkedInWriter
 from app.agents.research.research_agent import ResearchAgent
 from app.agents.reviewer.reviewer_agent import ReviewerAgent
+from app.agents.memory.memory_agent import MemoryAgent
 from app.clients.groq_client import GroqClient
 from app.config.env import EnvLoader
 from app.config.settings import Settings
@@ -46,12 +47,17 @@ def main() -> None:
         prompt_service=prompt_service,
     )
 
+    memory = MemoryAgent(
+        database=Path("app/agents/memory/posts.json"),
+    )
+
     # Orchestrator
     orchestrator = ContentOrchestrator(
         planner=planner,
         researcher=researcher,
         writer=writer,
         reviewer=reviewer,
+        memory=memory,
     )
 
     goal = input("🎯 What is your goal? ")

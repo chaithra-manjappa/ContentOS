@@ -4,6 +4,7 @@ from app.agents.planner.planner_agent import PlannerAgent
 from app.agents.research.research_agent import ResearchAgent
 from app.agents.reviewer.reviewer_agent import ReviewerAgent
 from app.agents.writer.linkedin_writer import LinkedInWriter
+from app.agents.memory.memory_agent import MemoryAgent
 
 
 class ContentOrchestrator:
@@ -17,12 +18,14 @@ class ContentOrchestrator:
         researcher: ResearchAgent,
         writer: LinkedInWriter,
         reviewer: ReviewerAgent,
+        memory: MemoryAgent,
     ) -> None:
 
         self._planner = planner
         self._researcher = researcher
         self._writer = writer
         self._reviewer = reviewer
+        self._memory = memory
 
     def create_post(
         self,
@@ -58,6 +61,16 @@ class ContentOrchestrator:
 
         print("\n" + "=" * 80)
         print("✅ REVIEWED POST")
+        print("=" * 80)
+
+        # Step 4 - Save to memory
+        self._memory.save(
+            goal=goal,
+            post=final_post,
+        )
+
+        print("\n" + "=" * 80)
+        print("✅ MEMORY SAVED")
         print("=" * 80)
 
         return final_post
