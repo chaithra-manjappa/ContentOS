@@ -14,11 +14,13 @@ class VoiceAgent:
     def __init__(
         self,
         tts_client: BaseTTSClient,
-        output_directory: Path,
     ) -> None:
 
         self._tts_client = tts_client
-        self._output_directory = output_directory
+
+        self._output_directory = Path(
+            "assets/generated/audio",
+        )
 
     def generate(
         self,

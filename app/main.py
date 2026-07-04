@@ -18,7 +18,7 @@ from app.config.settings import Settings
 from app.services.prompt_service import PromptService
 from app.services.video_renderer import VideoRenderer
 from app.agents.voice.voice_agent import VoiceAgent
-from app.clients.mock_tts_client import MockTTSClient
+from app.clients.kokoro_tts_client import KokoroTTSClient
 
 def main() -> None:
 
@@ -64,13 +64,8 @@ def main() -> None:
 
     renderer = VideoRenderer()
 
-    tts_client = MockTTSClient()
-
     voice_agent = VoiceAgent(
-         tts_client=tts_client,
-         output_directory=Path(
-             "assets/generated/audio",
-        ),
+         tts_client=KokoroTTSClient(),
     )
 
     memory = MemoryAgent(
