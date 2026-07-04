@@ -16,7 +16,7 @@ class VideoAgent:
 
         self._llm = llm
 
-    def create_script(
+    def generate(
         self,
         post: str,
     ) -> str:
@@ -24,21 +24,19 @@ class VideoAgent:
         prompt = f"""
 You are a professional Instagram Reels creator.
 
-Convert the following LinkedIn post into a 30-second Instagram Reel.
+Your task is to convert a LinkedIn post into a viral 30-second Instagram Reel.
 
-Return:
+Return ONLY the narration script.
 
-Hook
+Rules:
 
-Scene 1
-
-Scene 2
-
-Scene 3
-
-Call To Action
-
-Keep it engaging.
+- Maximum 30 seconds.
+- Start with a strong hook.
+- Use short sentences.
+- End with a call to action.
+- No scene numbers.
+- No markdown.
+- No explanations.
 
 LinkedIn Post:
 

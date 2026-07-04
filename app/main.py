@@ -12,6 +12,11 @@ from app.clients.groq_client import GroqClient
 from app.config.env import EnvLoader
 from app.config.settings import Settings
 from app.services.prompt_service import PromptService
+from app.agents.video.video_agent import VideoAgent
+from app.agents.scene.scene_agent import SceneAgent
+from app.agents.image.image_agent import ImageAgent
+
+from app.clients.mock_image_client import MockImageClient
 
 
 
@@ -42,6 +47,14 @@ def main() -> None:
 
     reviewer = ReviewerAgent(llm)
 
+    video_agent = VideoAgent(llm)
+
+    scene_agent = SceneAgent(llm)
+
+    image_client = MockImageClient()
+
+    image_agent = ImageAgent(image_client)
+
     writer = LinkedInWriter(
         llm=llm,
         prompt_service=prompt_service,
@@ -57,6 +70,9 @@ def main() -> None:
         researcher=researcher,
         writer=writer,
         reviewer=reviewer,
+        video_agent=video_agent,
+        scene_agent=scene_agent,
+        image_agent=image_agent,
         memory=memory,
     )
 
