@@ -1,5 +1,7 @@
 """Content orchestrator."""
 
+from pathlib import Path
+
 from app.agents.image.image_agent import ImageAgent
 from app.agents.memory.memory_agent import MemoryAgent
 from app.agents.planner.planner_agent import PlannerAgent
@@ -7,7 +9,8 @@ from app.agents.research.research_agent import ResearchAgent
 from app.agents.reviewer.reviewer_agent import ReviewerAgent
 from app.agents.scene.scene_agent import SceneAgent
 from app.agents.video.video_agent import VideoAgent
-from app.agents.writer.linkedin_writer import LinkedInWriter
+from app.agents.writer.content_writer import ContentWriter
+from app.services.video_renderer import VideoRenderer
 
 
 class ContentOrchestrator:
@@ -19,11 +22,12 @@ class ContentOrchestrator:
         self,
         planner: PlannerAgent,
         researcher: ResearchAgent,
-        writer: LinkedInWriter,
+        writer: ContentWriter,
         reviewer: ReviewerAgent,
         video_agent: VideoAgent,
         scene_agent: SceneAgent,
         image_agent: ImageAgent,
+        renderer: VideoRenderer,
         memory: MemoryAgent,
     ) -> None:
 
@@ -34,6 +38,7 @@ class ContentOrchestrator:
         self._video_agent = video_agent
         self._scene_agent = scene_agent
         self._image_agent = image_agent
+        self._renderer = renderer
         self._memory = memory
 
     def create_post(
@@ -73,11 +78,11 @@ class ContentOrchestrator:
         print("=" * 80)
         print(final_post)
 
-        # Step 5 - Video Script
+        # Step 5 - Reel Script
         script = self._video_agent.generate(final_post)
 
         print("\n" + "=" * 80)
-        print("🎬 VIDEO SCRIPT")
+        print("🎬 REEL SCRIPT")
         print("=" * 80)
         print(script)
 
@@ -87,29 +92,38 @@ class ContentOrchestrator:
         print("\n" + "=" * 80)
         print("🎞 STORYBOARD")
         print("=" * 80)
-        print(f"Title : {project.title}")
+        print(project.title)
         print(f"Scenes: {len(project.scenes)}")
 
-        # Step 7 - Generate Images
+        # Step 7 - Images
         project = self._image_agent.generate(project)
 
         print("\n" + "=" * 80)
-        print("🖼 GENERATED IMAGES")
+        print("🖼 IMAGES")
         print("=" * 80)
 
         for scene in project.scenes:
-            print(
-                f"Scene {scene.number}: {scene.image_path}"
-            )
+            print(scene.image_path)
 
-        # Step 8 - Save Memory
+        # Step 8 - Render video
+        project = self._renderer.render(
+            project=project,
+            output_path=Path(
+                "assets/generated/videos/reel.mp4",
+            ),
+        )
+
+        print("\n" + "=" * 80)
+        print("🎥 VIDEO")
+        print("=" * 80)
+        print(project.video_path)
+
+        # Step 9 - Memory
         self._memory.save(
             goal=goal,
             post=final_post,
         )
 
-        print("\n" + "=" * 80)
-        print("✅ MEMORY SAVED")
-        print("=" * 80)
+        print("\n✅ MEMORY SAVED")
 
         return final_post

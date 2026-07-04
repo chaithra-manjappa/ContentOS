@@ -21,26 +21,26 @@ class ReviewerAgent:
     ) -> str:
 
         prompt = f"""
-You are a senior LinkedIn content editor.
+You are an expert content editor.
 
-Improve the following LinkedIn post.
+Review and improve the following content.
 
 Requirements:
 
-- Better hook
-- Better readability
-- Better formatting
-- Better engagement
-- Keep technical accuracy
-- Keep author's tone
-- Keep hashtags
-- Do not make it significantly longer
+- Improve clarity.
+- Improve flow.
+- Improve engagement.
+- Preserve the original meaning.
+- Preserve the author's tone.
+- Correct grammar where necessary.
+- Do not add unnecessary information.
+- Do not make the content significantly longer.
 
-LinkedIn Post:
+Content:
 
 {post}
 
-Return ONLY the improved post.
+Return ONLY the improved content.
 """
 
         return self._llm.generate(prompt)

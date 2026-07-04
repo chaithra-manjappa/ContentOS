@@ -1,0 +1,15 @@
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_1.png'
+duration 5
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_2.png'
+duration 5
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_3.png'
+duration 5
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_4.png'
+duration 5
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_5.png'
+duration 5
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_6.png'
+duration 5
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_7.png'
+duration 5
+file '/Users/admin/Desktop/ContentOS/assets/generated/images/scene_7.png'

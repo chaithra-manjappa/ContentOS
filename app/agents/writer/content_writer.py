@@ -5,7 +5,7 @@ from app.clients.base_llm import BaseLLM
 from app.services.prompt_service import PromptService
 
 
-class LinkedInWriter(
+class ContentWriter(
     BaseWriter,
 ):
 
@@ -24,7 +24,7 @@ class LinkedInWriter(
     ) -> str:
 
         prompt = self._prompt_service.load(
-            "linkedin.md",
+            "content.md",
             topic=topic,
         )
 
