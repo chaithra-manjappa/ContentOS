@@ -13,6 +13,7 @@ class VideoProject:
     """
 
     title: str
+    caption: str = ""
 
     scenes: list[Scene] = field(
         default_factory=list,

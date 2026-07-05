@@ -25,6 +25,6 @@ class PublisherAgent:
     ) -> PublishResult:
 
         return self._publisher.publish(
-            video=video,
+            video_path=video,
             caption=caption,
         )

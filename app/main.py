@@ -19,8 +19,8 @@ from app.services.prompt_service import PromptService
 from app.services.video_renderer import VideoRenderer
 from app.agents.voice.voice_agent import VoiceAgent
 from app.clients.kokoro_tts_client import KokoroTTSClient
-from app.clients.instagram_publisher import InstagramPublisher
 from app.agents.publisher.publisher_agent import PublisherAgent
+from app.agents.publisher.instagram_playwright_publisher import InstagramPlaywrightPublisher
 
 def main() -> None:
 
@@ -66,10 +66,8 @@ def main() -> None:
 
     renderer = VideoRenderer()
 
-    instagram_publisher = InstagramPublisher()
-
     publisher = PublisherAgent(
-         publisher=instagram_publisher,
+         publisher=InstagramPlaywrightPublisher(),
     )
 
     voice_agent = VoiceAgent(

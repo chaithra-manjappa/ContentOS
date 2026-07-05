@@ -78,6 +78,8 @@ class ContentOrchestrator:
         # Step 4 - Review
         final_post = self._reviewer.review(draft)
 
+        project_caption = final_post
+
         print("\n" + "=" * 80)
         print("✅ REVIEWED POST")
         print("=" * 80)
@@ -93,6 +95,8 @@ class ContentOrchestrator:
 
         # Step 6 - Storyboard
         project = self._scene_agent.generate(script)
+
+        project.caption = final_post
 
         print("\n" + "=" * 80)
         print("🎞 STORYBOARD")
@@ -132,18 +136,21 @@ class ContentOrchestrator:
         print("=" * 80)
         print(project.video_path)
 
+        publish_result = None
 
-        publish_result = self._publisher.publish(
+        if project.video_path:
+            publish_result = self._publisher.publish(
              video=project.video_path,
-             caption=final_post,
-        )
+             caption=project.caption,
+         )
 
-        print("\n" + "=" * 80)
-        print("🚀 PUBLISH")
-        print("=" * 80)
-        print(f"Platform : {publish_result.platform}")
-        print(f"Success  : {publish_result.success}")
-        print(f"URL      : {publish_result.post_url}")
+        if publish_result:
+         print("\n" + "=" * 80)
+         print("🚀 PUBLISH")
+         print("=" * 80)
+         print(f"Platform : {publish_result.platform}")
+         print(f"Success  : {publish_result.success}")
+         print(f"URL      : {publish_result.post_url}")
 
         # Step 9 - Memory
         self._memory.save(
