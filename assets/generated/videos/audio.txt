@@ -1,0 +1,7 @@
+file '/Users/admin/Desktop/ContentOS/assets/generated/audio/scene_1.wav'
+file '/Users/admin/Desktop/ContentOS/assets/generated/audio/scene_2.wav'
+file '/Users/admin/Desktop/ContentOS/assets/generated/audio/scene_3.wav'
+file '/Users/admin/Desktop/ContentOS/assets/generated/audio/scene_4.wav'
+file '/Users/admin/Desktop/ContentOS/assets/generated/audio/scene_5.wav'
+file '/Users/admin/Desktop/ContentOS/assets/generated/audio/scene_6.wav'
+file '/Users/admin/Desktop/ContentOS/assets/generated/audio/scene_7.wav'

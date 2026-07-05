@@ -9,7 +9,7 @@ from app.models.video_project import VideoProject
 
 class VideoRenderer:
     """
-    Renders a VideoProject into an MP4 file.
+    Creates an MP4 from generated scene images and narration audio.
     """
 
     def render(
@@ -23,62 +23,119 @@ class VideoRenderer:
             exist_ok=True,
         )
 
-        input_files: list[tuple[Path, int]] = []
+        temp_directory = output_path.parent
 
-        for scene in project.scenes:
+        # -------------------------------------------------
+        # IMAGE CONCAT FILE
+        # -------------------------------------------------
 
-            if scene.image_path is None:
-                continue
+        image_concat = temp_directory / "images.txt"
 
-            input_files.append(
-                (
-                    scene.image_path,
-                    scene.duration,
-                )
-            )
-
-        if not input_files:
-            raise RuntimeError(
-                "No scene images were found to render."
-            )
-
-        concat_file = output_path.parent / "images.txt"
-
-        with concat_file.open(
+        with image_concat.open(
             "w",
             encoding="utf-8",
         ) as file:
 
-            for image_path, duration in input_files:
+            for scene in project.scenes:
+
+                if scene.image_path is None:
+                    continue
 
                 file.write(
-                    f"file '{image_path.resolve()}'\n"
+                    f"file '{scene.image_path.resolve()}'\n"
                 )
 
                 file.write(
-                    f"duration {duration}\n"
+                    f"duration {scene.duration}\n"
                 )
 
-            # FFmpeg requires the final image to be repeated.
-            file.write(
-                f"file '{input_files[-1][0].resolve()}'\n"
-            )
+            if project.scenes:
+
+                last = project.scenes[-1]
+
+                if last.image_path is not None:
+
+                    file.write(
+                        f"file '{last.image_path.resolve()}'\n"
+                    )
+
+        # -------------------------------------------------
+        # AUDIO CONCAT FILE
+        # -------------------------------------------------
+
+        audio_concat = temp_directory / "audio.txt"
+
+        with audio_concat.open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+
+            for scene in project.scenes:
+
+                if scene.audio_path is None:
+                    continue
+
+                file.write(
+                    f"file '{scene.audio_path.resolve()}'\n"
+                )
+
+        narration_path = temp_directory / "narration.wav"
 
         (
             ffmpeg
             .input(
-                str(concat_file),
+                str(audio_concat),
                 format="concat",
                 safe=0,
             )
             .output(
-                str(output_path),
-                pix_fmt="yuv420p",
-                vcodec="libx264",
+                str(narration_path),
+                acodec="pcm_s16le",
             )
             .overwrite_output()
             .run(
-                 overwrite_output=True,
+                quiet=False,
+            )
+        )
+
+        # -------------------------------------------------
+        # VIDEO INPUT
+        # -------------------------------------------------
+
+        video = ffmpeg.input(
+            str(image_concat),
+            format="concat",
+            safe=0,
+        )
+
+        # -------------------------------------------------
+        # AUDIO INPUT
+        # -------------------------------------------------
+
+        audio = ffmpeg.input(
+            str(narration_path),
+        )
+
+        # -------------------------------------------------
+        # MERGE VIDEO + AUDIO
+        # -------------------------------------------------
+
+        (
+            ffmpeg
+            .output(
+                video.video,
+                audio.audio,
+                str(output_path),
+                vcodec="libx264",
+                acodec="aac",
+                pix_fmt="yuv420p",
+                shortest=None,
+                movflags="+faststart",
+            )
+            .overwrite_output()
+            .global_args("-loglevel", "error")
+            .run(
+                quiet=False,
             )
         )
 

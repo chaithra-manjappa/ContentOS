@@ -21,28 +21,24 @@ class ResearchAgent:
     ) -> str:
 
         prompt = f"""
-You are a senior software researcher.
+You are an expert researcher.
 
-Research this topic.
+Research the following topic thoroughly.
 
 Topic:
 {topic}
 
 Return:
 
-- Short Summary
-
-- Important Concepts
-
+- Summary
+- Key Ideas
 - Best Practices
-
 - Common Mistakes
-
-- Real-world Use Cases
+- Real-world Examples
 
 Keep it concise.
 
-Do NOT write a LinkedIn post.
+Do NOT write the final content.
 """
 
         return self._llm.generate(prompt)
