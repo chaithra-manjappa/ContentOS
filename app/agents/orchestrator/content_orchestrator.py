@@ -12,7 +12,7 @@ from app.agents.video.video_agent import VideoAgent
 from app.agents.writer.content_writer import ContentWriter
 from app.services.video_renderer import VideoRenderer
 from app.agents.voice.voice_agent import VoiceAgent
-
+from app.agents.publisher.publisher_agent import PublisherAgent
 
 class ContentOrchestrator:
     """
@@ -30,6 +30,7 @@ class ContentOrchestrator:
         image_agent: ImageAgent,
         voice_agent: VoiceAgent,
         renderer: VideoRenderer,
+        publisher: PublisherAgent,
         memory: MemoryAgent,
     ) -> None:
 
@@ -42,6 +43,7 @@ class ContentOrchestrator:
         self._image_agent = image_agent
         self._voice_agent = voice_agent
         self._renderer = renderer
+        self._publisher = publisher
         self._memory = memory
 
     def create_post(
@@ -129,6 +131,19 @@ class ContentOrchestrator:
         print("🎥 VIDEO")
         print("=" * 80)
         print(project.video_path)
+
+
+        publish_result = self._publisher.publish(
+             video=project.video_path,
+             caption=final_post,
+        )
+
+        print("\n" + "=" * 80)
+        print("🚀 PUBLISH")
+        print("=" * 80)
+        print(f"Platform : {publish_result.platform}")
+        print(f"Success  : {publish_result.success}")
+        print(f"URL      : {publish_result.post_url}")
 
         # Step 9 - Memory
         self._memory.save(
